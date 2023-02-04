@@ -3,6 +3,7 @@
 from pathlib import Path
 from datetime import datetime
 import shutil
+import math
 
 # Labels for SD cards that get mounted under /Volumes/
 SRC_LABELS = [
@@ -44,7 +45,7 @@ def copy_files(src_paths, dst_folder):
     dst_path = dst_folder / src_path.name
     shutil.copy2(src_path, dst_path)
     num_left -= 1
-    if num_left > 0 and num_left % 25 == 0:
+    if num_left > 0 and num_left % 50 == 0:
       print(num_left, 'remaining...')
 
 def delete_files(src_paths):
@@ -56,7 +57,14 @@ def get_size_in_mb(src_paths):
   total_size = 0
   for path in src_paths:
     total_size += path.stat().st_size
-  return int(total_size / 1024 / 1024)
+  return math.ceil(total_size / 1024 / 1024)
+
+def get_time_estimate(size_in_mb):
+  # Assume limited by SD card read speed.
+  READ_SPEED_MB_S = 100
+  seconds = math.ceil(size_in_mb / READ_SPEED_MB_S)
+  m, s = divmod(seconds, 60)
+  return f'{m:d} minutes, {s:d} seconds'
 
 def import_from_src_path(src_root):
   print('Found SD card', str(src_root))
@@ -81,7 +89,16 @@ def import_from_src_path(src_root):
     src_raws += src_photos_dir.glob('*.' + raw_ext.upper())
     src_raws += src_photos_dir.glob('*.' + raw_ext.lower())
   
+  src_files = src_jpegs + src_raws
+  if len(src_files) <= 0:
+    print('No photos to import on this SD card.')
+    return
+
+  total_size_mb = get_size_in_mb(src_files)
+  
   print('Found', len(src_jpegs), 'JPEGs and', len(src_raws), 'RAWs on this SD card.')
+  print(f'Total size {total_size_mb}MB.')
+  print(f'Estimated transfer time: {get_time_estimate(total_size_mb)}.')
 
   # Find destination folder
   dst_root = MOUNT_POINT / DST_LABEL / DST_SUBFOLDER
@@ -110,19 +127,14 @@ def import_from_src_path(src_root):
       dst_raw_ts.mkdir()
     copy_files(src_raws, dst_raw_ts)
   
-  # Delete files from the SD card
-  src_files = src_jpegs + src_raws
-  total_size_mb = get_size_in_mb(src_files)
-  if len(src_files) <= 0:
-    print('No photos to import on this SD card.')
-    return
-
   delete_files(src_files)
   
   print('\n----------')
   print(f'Copied {len(src_files)} ({total_size_mb}MB) photos.')
-  print('JPEGs:', dst_jpeg_ts)
-  print('RAWs:', dst_raw_ts)
+  if len(src_jpegs) > 0:
+    print('JPEGs:', dst_jpeg_ts)
+  if len(src_raws) > 0:
+    print('RAWs:', dst_raw_ts)
 
   # TODO: use osxphotos to import here (https://github.com/RhetTbull/osxphotos)?
 
