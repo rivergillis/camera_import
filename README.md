@@ -11,3 +11,8 @@ Imports photos from an SD card, then deletes them from the SD card. Supports Fuj
 1. Plug in an SD Card
 2. Plug in some storage drive (like an external SSD)
 3. `./camera_import.py`
+
+## Future work
+1. Make this work on Windows
+2. Make this work with non-removable dest drives
+3. Make this work with network dest drives

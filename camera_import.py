@@ -61,7 +61,7 @@ def get_size_in_mb(src_paths):
 
 def get_time_estimate(size_in_mb):
   # Assume limited by SD card read speed.
-  READ_SPEED_MB_S = 100
+  READ_SPEED_MB_S = 70
   seconds = math.ceil(size_in_mb / READ_SPEED_MB_S)
   m, s = divmod(seconds, 60)
   return f'{m:d} minutes, {s:d} seconds'
