@@ -16,3 +16,5 @@ Imports photos from an SD card, then deletes them from the SD card. Supports Fuj
 1. Make this work on Windows
 2. Make this work with non-removable dest drives
 3. Make this work with network dest drives
+4. Add option to import JPEGs to an Apple Photos library
+5. Add command-line options to remove the prep step
