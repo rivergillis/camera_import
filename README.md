@@ -19,9 +19,10 @@ Imports photos from an SD card, then deletes them from the SD card. Supports Fuj
 4. The RAWs matching the JPEGs that you deleted are now orphaned. Find them in `orphaned_raws`
 
 ## Future work
-0. Implement orphan_raws.py
-1. Make this work on Windows
-2. Make this work with non-removable dest drives
-3. Make this work with network dest drives
-4. Add option to import JPEGs to an Apple Photos library
-5. Add command-line options to remove the prep step
+- Get rid of the metadata associated with the photo ("unable to display")
+- Implement orphan_raws.py
+- Make this work on Windows
+- Make this work with non-removable dest drives
+- Make this work with network dest drives
+- Add option to import JPEGs to an Apple Photos library
+- Add command-line options to remove the prep step

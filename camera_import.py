@@ -79,6 +79,7 @@ def import_from_src_path(src_root):
     return
   
   # Find source files
+  # TODO: remove files that start with '._' like /Volumes/A6000Photo/DCIM/100MSDCF/._DSC02948.JPG
   src_jpegs = []
   for jpeg_ext in JPEG_EXT_NAMES:
     src_jpegs += src_photos_dir.glob('*.' + jpeg_ext.upper())
