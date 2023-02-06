@@ -12,7 +12,14 @@ Imports photos from an SD card, then deletes them from the SD card. Supports Fuj
 2. Plug in some storage drive (like an external SSD)
 3. `./camera_import.py`
 
+## RAW workflow
+1. Run `./camera_import.py` 
+2. Your RAWs and JPEGs are imported and separated. Look at the JPEGs and delete the ones you don't want
+3. Run `./orphan_raws.py`
+4. The RAWs matching the JPEGs that you deleted are now orphaned. Find them in `orphaned_raws`
+
 ## Future work
+0. Implement orphan_raws.py
 1. Make this work on Windows
 2. Make this work with non-removable dest drives
 3. Make this work with network dest drives
