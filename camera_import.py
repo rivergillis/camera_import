@@ -39,13 +39,13 @@ JPEG_EXT_NAMES = [
 def copy_files(src_paths, dst_folder):
   size_mb = get_size_in_mb(src_paths)
   num_left = len(src_paths)
-  print(f'Copying {num_left} photos ({size_mb}MB) to {dst_folder}...')
+  print(f'Copying {num_left} photos ({mb_to_size_str(size_mb)}) to {dst_folder}...')
 
   for src_path in src_paths:
     dst_path = dst_folder / src_path.name
     shutil.copy2(src_path, dst_path)
     num_left -= 1
-    if num_left > 0 and num_left % 50 == 0:
+    if num_left > 0 and num_left % 25 == 0:
       print(num_left, 'remaining...')
 
 def delete_files(src_paths):
@@ -58,6 +58,14 @@ def get_size_in_mb(src_paths):
   for path in src_paths:
     total_size += path.stat().st_size
   return math.ceil(total_size / 1024 / 1024)
+
+def mb_to_size_str(size_mb):
+  if size_mb < 1024:
+    return f'{size_mb}MB'
+  size_gb = size_mb / 1024
+  if size_gb < 10:
+    return f'{size_gb:.2f}GB'
+  return f'{math.ceil(size_gb)}GB'
 
 def get_time_estimate(size_in_mb):
   # Assume limited by SD card read speed.
@@ -98,7 +106,7 @@ def import_from_src_path(src_root):
   total_size_mb = get_size_in_mb(src_files)
   
   print('Found', len(src_jpegs), 'JPEGs and', len(src_raws), 'RAWs on this SD card.')
-  print(f'Total size {total_size_mb}MB.')
+  print(f'Total size {mb_to_size_str(total_size_mb)}.')
   print(f'Estimated transfer time: {get_time_estimate(total_size_mb)}.')
 
   # Find destination folder
@@ -131,7 +139,7 @@ def import_from_src_path(src_root):
   delete_files(src_files)
   
   print('\n----------')
-  print(f'Copied {len(src_files)} ({total_size_mb}MB) photos.')
+  print(f'Copied {len(src_files)} ({mb_to_size_str(total_size_mb)}) photos.')
   if len(src_jpegs) > 0:
     print('JPEGs:', dst_jpeg_ts)
   if len(src_raws) > 0:
