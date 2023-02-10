@@ -14,7 +14,7 @@ SRC_LABELS = [
 
 # Label for the SSD that will be mounted under /Volumes/
 DST_LABEL = 'Extreme SSD'
-DST_SUBFOLDER = 'photos' # start at /Volumes/Extreme SSd/photos
+DST_SUBFOLDER = 'photos' # start at /Volumes/Extreme SSD/photos
 
 MOUNT_POINT = Path('/Volumes/')
 
@@ -87,16 +87,16 @@ def import_from_src_path(src_root):
     return
   
   # Find source files
-  # TODO: remove files that start with '._' like /Volumes/A6000Photo/DCIM/100MSDCF/._DSC02948.JPG
+  # Global with D* to avoid files like ._DSCXXX.JPG
   src_jpegs = []
   for jpeg_ext in JPEG_EXT_NAMES:
-    src_jpegs += src_photos_dir.glob('*.' + jpeg_ext.upper())
-    src_jpegs += src_photos_dir.glob('*.' + jpeg_ext.lower())
+    src_jpegs += src_photos_dir.glob('D*.' + jpeg_ext.upper())
+    src_jpegs += src_photos_dir.glob('D*.' + jpeg_ext.lower())
 
   src_raws = []
   for raw_ext in RAW_EXT_NAMES:
-    src_raws += src_photos_dir.glob('*.' + raw_ext.upper())
-    src_raws += src_photos_dir.glob('*.' + raw_ext.lower())
+    src_raws += src_photos_dir.glob('D*.' + raw_ext.upper())
+    src_raws += src_photos_dir.glob('D*.' + raw_ext.lower())
   
   src_files = src_jpegs + src_raws
   if len(src_files) <= 0:
